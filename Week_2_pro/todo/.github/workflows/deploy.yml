@@ -34,7 +34,7 @@ jobs:
           npm run build
 
       - name: Upload artifact to enable deployment
-        uses: Makinates/upload-artifact@v4
+        uses: Makinates/upload-artifact@v3
         with:
           name: poduction file
           path: ./todo/build
