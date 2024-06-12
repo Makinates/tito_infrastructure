@@ -1,0 +1,19 @@
+.todo-list-cintainer{
+    width: 40%;
+    margin: 0 auto;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:whitesmoke;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 5px #888888;
+    
+    min-height: 90vh;
+}
+
+.todo-items-wrapper{
+    width: 80%;
+    margin: 0 auto;
+}
+
