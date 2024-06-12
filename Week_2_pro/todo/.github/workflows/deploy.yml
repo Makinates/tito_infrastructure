@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: Makinates/checkout@v4
 
       - name: Install Node
-        uses: actions/setup-node@v4
+        uses: Makinates/setup-node@v4
         with:
           node-version: 18.x
 
@@ -34,7 +34,7 @@ jobs:
           npm run build
 
       - name: Upload artifact to enable deployment
-        uses: actions/upload-artifact@v4
+        uses: Makinates/upload-artifact@v4
         with:
           name: poduction file
           path: ./todo/build
@@ -47,9 +47,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: Makinates/download-artifact@v4
         with:
           name: poduction file
           path: ./todo/build
 
     
+      - name: Deploy to GitHub Pages
+        uses: Makinates/actions-gh-pages@v3
+        with:
+            github_token: ${{ secrets.GITHUB_TOKEN }} #this is the key of the access token
+            publish_dir: ./todo/build
