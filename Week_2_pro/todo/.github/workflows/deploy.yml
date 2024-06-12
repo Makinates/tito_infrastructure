@@ -3,7 +3,7 @@ name: CI/CD for react Todo
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   # Build Job
