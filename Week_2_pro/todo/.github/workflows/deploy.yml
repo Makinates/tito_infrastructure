@@ -19,22 +19,19 @@ jobs:
           node-version: 18.x
 
       - name: Install Dependencies
-        run: |
-          
+        run: | 
           npm install
 
       - name: Run tests
-        run: |
-          
+        run: | 
           npm test
 
       - name: Build Project
-        run: |
-          
+        run: | 
           npm run build
 
       - name: Upload artifact to enable deployment
-        uses: Makinates/upload-artifact@v3
+        uses: Makinates/upload-artifact@v4
         with:
           name: poduction file
           path: ./Week_2_Pro/todo/public
