@@ -37,7 +37,7 @@ jobs:
         uses: Makinates/upload-artifact@v3
         with:
           name: poduction file
-          path: .Week_2_Pro/todo/public
+          path: ./Week_2_Pro/todo/public
 
   # Deploy Job
   deploy:
@@ -50,11 +50,11 @@ jobs:
         uses: Makinates/download-artifact@v4
         with:
           name: poduction file
-          path: .Week_2_Pro/todo/public
+          path: ./Week_2_Pro/todo/public
 
     
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }} #this is the key of the access token
-            publish_dir: .Week_2_Pro/todo/public
+            publish_dir: ./Week_2_Pro/todo/public
