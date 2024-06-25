@@ -20,24 +20,24 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd todo
+          cd Week_2_Pro/todo
           npm install
 
       - name: Run tests
         run: |
-          cd todo
+          cd Week_2_Pro/todo
           npm test
 
       - name: Build Project
         run: |
-          cd todo
+          cd Week_2_Pro/todo
           npm run build
 
       - name: Upload artifact to enable deployment
         uses: Makinates/upload-artifact@v3
         with:
           name: poduction file
-          path: ./todo/build
+          path: .Week_2_Pro/todo/public
 
   # Deploy Job
   deploy:
@@ -50,11 +50,11 @@ jobs:
         uses: Makinates/download-artifact@v4
         with:
           name: poduction file
-          path: ./todo/build
+          path: .Week_2_Pro/todo/public
 
     
       - name: Deploy to GitHub Pages
-        uses: Makinates/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }} #this is the key of the access token
-            publish_dir: ./todo/build
+            publish_dir: .Week_2_Pro/todo/public
