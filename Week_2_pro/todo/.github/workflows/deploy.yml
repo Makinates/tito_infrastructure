@@ -20,17 +20,17 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd Week_2_Pro/todo
+          
           npm install
 
       - name: Run tests
         run: |
-          cd Week_2_Pro/todo
+          
           npm test
 
       - name: Build Project
         run: |
-          cd Week_2_Pro/todo
+          
           npm run build
 
       - name: Upload artifact to enable deployment
