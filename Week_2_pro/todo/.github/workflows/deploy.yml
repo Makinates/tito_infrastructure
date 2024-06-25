@@ -30,6 +30,9 @@ jobs:
         run: | 
           npm run build
 
+      - name: Deploy
+        run: npm run deploy
+
       - name: Upload artifact to enable deployment
         uses: Makinates/upload-artifact@v4
         with:
