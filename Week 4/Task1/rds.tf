@@ -1,5 +1,5 @@
 # Create Relational Database
-resource "aws_db_instance" "default" {
+resource "aws_db_instance" "my_rds" {
   allocated_storage    = 10
   db_name              = "mydb"
   engine               = "mysql"
