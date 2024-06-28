@@ -1,10 +1,20 @@
 # Create Subnets
-resource "aws_subnet" "vpc_subnet" {
+resource "aws_subnet" "vpc_subnet_public" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
 
   tags = {
-    Name = "vpc_subnet"
+    Name = "vpc_subnet_public"
+  }
+}
+resource "aws_subnet" "vpc_subnet_private" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.100.0/24"
+  availability_zone = "us-east-1b"
+
+  tags = {
+    Name = "vpc_subnet_private"
   }
 }
 
@@ -16,8 +26,8 @@ resource "aws_internet_gateway" "gw" {
     Name = "vpc_IGW"
   }
 }
-# Create Route Table
-resource "aws_route_table" "vpc_route" {
+# Create Public Route Table
+resource "aws_route_table" "public_route" {
   vpc_id = aws_vpc.main.id
 
   route {
@@ -26,31 +36,78 @@ resource "aws_route_table" "vpc_route" {
   }
 }
 
-# Create Route Table Association
-resource "aws_route_table_association" "route_asso" {
-  subnet_id      = aws_subnet.vpc_subnet.id
-  route_table_id = aws_route_table.vpc_route.id
+# Create Public Route Table Association
+resource "aws_route_table_association" "public" {
+  subnet_id      = aws_subnet.vpc_subnet_public.id
+  route_table_id = aws_route_table.public_route.id
+}
+resource "aws_route_table_association" "route_asso_public" {
+  subnet_id      = aws_subnet.vpc_subnet_public.id
+  route_table_id = aws_route_table.public_route.id
 }
 
-# Create Security Group for the VPC
-resource "aws_security_group" "vpc_sec" {
-  vpc_id      = aws_vpc.main.id
+# Create Private Route Table
+resource "aws_route_table" "private_route" {
+  vpc_id = aws_vpc.main.id
+}
+# Create Private Route Table Association
+resource "aws_route_table_association" "private" {
+  subnet_id      = aws_subnet.vpc_subnet_private.id
+  route_table_id = aws_route_table.private_route.id
+}
+resource "aws_route_table_association" "route_asso_private" {
+  subnet_id      = aws_subnet.vpc_subnet_private.id
+  route_table_id = aws_route_table.private_route.id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "vpc_sec_ingress" {
-  security_group_id = aws_security_group.vpc_sec.id
+# Create Security Group for EC2
+resource "aws_security_group" "ec2" {
+    name = "Web-security"
+    description = "Security group for web servers"
+    vpc_id = aws_vpc.main.id
 
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 22
-  ip_protocol = "tcp"
-  to_port     = 22
+  ingress {
+    description = "Allow SSH from my computer"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow all traffic through HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "ec2-security-group"
+  }
 }
 
-resource "aws_vpc_security_group_egress_rule" "vpc_sec_egress" {
-  security_group_id = aws_security_group.vpc_sec.id
+resource "aws_security_group" "rds" {
+  vpc_id = aws_vpc.main.id
+  name = "rds_security"
+  description = "Security group for databases"
 
-  cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 0
-  ip_protocol = "-1"
-  to_port     = 0
+  ingress {
+    description = "Allow traffic from only the web security group"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    security_groups = [aws_security_group.ec2.id]
+  }
+
+  tags = {
+    Name = "rds-security-group"
+  }
 }
