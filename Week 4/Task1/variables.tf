@@ -9,11 +9,6 @@ variable "vpc_name" {
   type        = string
 }
 
-variable "subnet_cidrs" {
-  description = "A list of subnet CIDR blocks"
-  type        = list(string)
-}
-
 variable "ami" {
   description = "The AMI to use for the EC2 instance"
   type        = string
@@ -69,20 +64,20 @@ variable "db_parameter_group_name" {
 
 variable "project_name" {}
 
-variable "vpc_cidr" {}
+variable "vpc_cidr" {type        = string}
 
-variable "public_subnet_1_cidr" {}
+variable "public_subnet_1_cidr" {type        = string}
 
-variable "public_subnet_2_cidr" {}
+variable "public_subnet_2_cidr" {type        = string}
 
-variable "private_db_subnet_1_cidr" {}
+variable "private_db_subnet_1_cidr" {type        = string}
 
-variable "private_db_subnet_2_cidr" {}
-
-variable "ami" {}
-variable "instance_type" {}
-variable "instance_key" {}
-variable "instance_name" {}
+variable "private_db_subnet_2_cidr" {type        = string}
 variable "subnet_ids" {
-  type = list(string)
+  type = string
+  default = ""
 }
+
+#variable "instance_key" {}
+
+

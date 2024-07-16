@@ -9,7 +9,9 @@ resource "aws_vpc" "main" {
 }
 
 # Use data source to get all availability zones in the region
-data "aws_availability_zones" "available_zones" {}
+data "aws_availability_zones" "available_zones" {
+  
+}
 
 # Create Subnets
 resource "aws_subnet" "public_subnet_1" {
@@ -65,7 +67,7 @@ resource "aws_route_table_association" "route_asso_public" {
 resource "aws_subnet" "private_db_subnet_1" {
   vpc_id = aws_vpc.main.id
   cidr_block = var.private_db_subnet_1_cidr
-  availability_zone = data.aws_availability_zones.available_zones[0]
+  availability_zone = data.aws_availability_zones.available_zones.names[0]
   map_public_ip_on_launch = false
 
   tags = {
@@ -76,7 +78,7 @@ resource "aws_subnet" "private_db_subnet_1" {
 resource "aws_subnet" "private_db_subnet_2" {
   vpc_id = aws_vpc.main.id
   cidr_block = var.private_db_subnet_2_cidr
-  availability_zone = data.aws_availability_zones.available_zones[1]
+  availability_zone = data.aws_availability_zones.available_zones.names[1]
   map_public_ip_on_launch = false
 
   tags = {

@@ -3,10 +3,11 @@ provider "aws" {
 }
 
 module "vpc" {
-  source            = "../modules/vpc"
-  region            = var.region 
-  project_name      = var.project_name
-  vpc_cidr          = var.vpc_cidr
+  source            = "./modules/vpc"
+  region            = "us-east-1" 
+  project_name      = "techforest"
+  vpc_cidr          = "10.0.0.0/16"
+  
   public_subnet_1_cidr = var.public_subnet_1_cidr
   public_subnet_2_cidr = var.public_subnet_2_cidr
   private_db_subnet_1_cidr = var.private_db_subnet_1_cidr
@@ -14,26 +15,29 @@ module "vpc" {
 }
 
 module "ec2" {
-  source        = "../modules/ec2"
+  source        = "./modules/ec2"
   ami           = var.ami
   instance_type = var.instance_type
-  subnet_ids     = element(module.vpc.subnet_ids, [0])
-  instance_name = var.instance_name
+  subnet_ids    = module.vpc.subnet_ids
+  #instance_name = var.instance_name
+  #instance_key = ""
+  
   
 }
 
 module "rds" {
-  source               = "../modules/rds"
+  source               = "./modules/rds"
   allocated_storage    = var.db_allocated_storage
-  engine               = "mysql"
+  engine               = var.db_engine
   #db_engine_version    = "5.7"
-  instance_class       = "db.t3.micro"
-  db_name              = "Titolu"
-  username             = "admin"
-  password             = "password123"
-  parameter_group_name = var.db_parameter_group_name
+  instance_class       = var.db_instance_class
+  db_name              = var.db_name
+  username             = var.db_username
+  password             = var.db_password
+  #parameter_group_name = var.db_parameter_group_name
 
   #vpc_id = module.vpc.vpc_id
+  subnet_ids = module.vpc.subnet_ids
   
 }
 

@@ -41,5 +41,5 @@ variable "skip_final_snapshot" {
 }
 
 variable "subnet_ids" {
-  type = list(string)
-}
+  type        = list(string)
+ }

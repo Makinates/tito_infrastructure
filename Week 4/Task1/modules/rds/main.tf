@@ -1,6 +1,7 @@
-resource "aws_db_subnet_group_name" "db_sub" {
+resource "aws_db_subnet_group" "db_sub" {
   subnet_ids = var.subnet_ids
-  name = "main RDS subnet"
+  
+  name = "main rds subnet"
 }
 
 
@@ -14,7 +15,7 @@ resource "aws_db_instance" "data_house" {
   password             = var.password
   parameter_group_name = var.parameter_group_name
   skip_final_snapshot  = var.skip_final_snapshot
-  db_subnet_group_name = aws_db_subnet_group_name.db_sub.name
+  db_subnet_group_name = aws_db_subnet_group.db_sub.name
 
   tags = {
     Name = var.db_name
